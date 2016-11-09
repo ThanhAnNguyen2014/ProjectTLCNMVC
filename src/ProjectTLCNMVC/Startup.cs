@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProjectTLCNMVC.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace ProjectTLCNMVC
 {
@@ -40,8 +41,18 @@ namespace ProjectTLCNMVC
 			services.AddDbContext<ProjectShopAPIContext>(options => options.UseSqlServer(connection));
 			// Add framework services.
 			services.AddApplicationInsightsTelemetry(Configuration);
+			services.Configure<RazorViewEngineOptions>(options =>
+			{
+				options.AreaViewLocationFormats.Clear();
+				options.AreaViewLocationFormats.Add("/Admin/{2}/Views/{1}/{0}.cshtml");
+				options.AreaViewLocationFormats.Add("/Admin/{2}/Views/Shared/{0}.cshtml");
+				options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+			}
 
-            services.AddMvc();
+		);
+
+
+			services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,10 +79,13 @@ namespace ProjectTLCNMVC
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-				
+				routes.MapRoute(
+					name: "areaRoute",
+					template: "{area:exists}/{controller=Home}/{action=Index}");
+				routes.MapRoute(
+				   name: "default",
+				   template: "{controller=Home}/{action=Index}/{id?}");
+
 			});
         }
     }
