@@ -2973,3 +2973,9 @@ ul.messagesList li span.date {
 	}
     
 }
+.statbox .numberuser {
+    font-size: 45px;
+    position: absolute;
+    top: 14px;
+    right: 15px;
+}
