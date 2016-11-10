@@ -41,6 +41,7 @@ namespace ProjectTLCNMVC
 			services.AddDbContext<ProjectShopAPIContext>(options => options.UseSqlServer(connection));
 			// Add framework services.
 			services.AddApplicationInsightsTelemetry(Configuration);
+
 			services.Configure<RazorViewEngineOptions>(options =>
 			{
 				options.AreaViewLocationFormats.Clear();
@@ -56,12 +57,11 @@ namespace ProjectTLCNMVC
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ProjectShopAPIContext context, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            app.UseApplicationInsightsRequestTelemetry();
+			app.UseApplicationInsightsRequestTelemetry();
 
             if (env.IsDevelopment())
             {
@@ -87,6 +87,8 @@ namespace ProjectTLCNMVC
 				   template: "{controller=Home}/{action=Index}/{id?}");
 
 			});
+
+
         }
     }
 }

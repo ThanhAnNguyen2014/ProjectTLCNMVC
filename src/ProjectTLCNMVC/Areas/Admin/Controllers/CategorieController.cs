@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ProjectTLCNMVC.Dao.Admin;
 using ProjectTLCNMVC.Entities;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,20 +11,18 @@ using ProjectTLCNMVC.Entities;
 namespace ProjectTLCNMVC.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-    public class HomeController : Controller
+    public class CategorieController : Controller
     {
-		
+		ProjectShopAPIContext context;
+		public CategorieController(ProjectShopAPIContext _context)
+		{
+			context = _context;
+		}
 		// GET: /<controller>/
 		public IActionResult Index()
-		{
-			return View();
+        {
+			return View(context.Categories.ToList());
+			//return View(model);
 		}
-		//public ObjectResult Index()
-		//{
-		//	var categories = new Categories { CategoryName = "Cổng VGA", Description="Cổng xuất hình ảnh từ laptop sang Máy chiếu" };
-		//	return new ObjectResult(categories);
-		//}
-
-
-    }
+	}
 }

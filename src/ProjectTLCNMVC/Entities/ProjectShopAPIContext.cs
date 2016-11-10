@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ProjectTLCNMVC.Entities
 {
-    public partial class ProjectShopAPIContext : DbContext
+	public partial class ProjectShopAPIContext : DbContext
     {
 		public ProjectShopAPIContext(DbContextOptions<ProjectShopAPIContext> options)
             : base(options)
