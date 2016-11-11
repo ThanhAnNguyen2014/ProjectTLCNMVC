@@ -9,13 +9,8 @@ namespace ProjectTLCNMVC.Dao.Admin
 
 	public class CategoriesDao
     {
-		
 
 		ProjectShopAPIContext context;
-		public CategoriesDao()
-		{
-			
-		}
 		public List<Categories> ListAll()
 		{
 			return context.Categories.Where(x => x.IsDisplay == true).ToList();

@@ -13,16 +13,20 @@ namespace ProjectTLCNMVC.Areas.Admin.Controllers
 	[Area("Admin")]
     public class CategorieController : Controller
     {
-		ProjectShopAPIContext context;
-		public CategorieController(ProjectShopAPIContext _context)
+		ProjectShopAPIContext db;
+		public CategorieController(ProjectShopAPIContext _db)
 		{
-			context = _context;
+			db = _db;
 		}
+
+
 		// GET: /<controller>/
 		public IActionResult Index()
         {
-			return View(context.Categories.ToList());
-			//return View(model);
+			return View(db.Categories.ToList());
+
+			//var model = new CategoriesDao();
+			//return View(model.ListAll());
 		}
 	}
 }

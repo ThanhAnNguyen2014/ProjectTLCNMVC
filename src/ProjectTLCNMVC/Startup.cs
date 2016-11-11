@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using ProjectTLCNMVC.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ProjectTLCNMVC
 {
@@ -38,9 +40,13 @@ namespace ProjectTLCNMVC
         {
 			// config database
 			var connection = @"Server=.;Database=ProjectShopAPI;Trusted_Connection=True;";
-			services.AddDbContext<ProjectShopAPIContext>(options => options.UseSqlServer(connection));
+			services.AddEntityFramework().AddDbContext<ProjectShopAPIContext>(options => options.UseSqlServer(connection));
 			// Add framework services.
 			services.AddApplicationInsightsTelemetry(Configuration);
+
+			//services.AddIdentity<IdentityUser, IdentityRole>()
+			//	.AddEntityFrameworkStores<ProjectShopAPIContext>()
+			//	.AddDefaultTokenProviders();
 
 			services.Configure<RazorViewEngineOptions>(options =>
 			{
@@ -54,10 +60,11 @@ namespace ProjectTLCNMVC
 
 
 			services.AddMvc();
-        }
+			
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ProjectShopAPIContext context, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -65,9 +72,10 @@ namespace ProjectTLCNMVC
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+				app.UseBrowserLink();
+			}
             else
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -76,8 +84,9 @@ namespace ProjectTLCNMVC
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+			//app.UseIdentity();
 
-            app.UseMvc(routes =>
+			app.UseMvc(routes =>
             {
 				routes.MapRoute(
 					name: "areaRoute",
@@ -87,8 +96,12 @@ namespace ProjectTLCNMVC
 				   template: "{controller=Home}/{action=Index}/{id?}");
 
 			});
+			//app.UseMvc();
+			//using (var context = app.ApplicationServices.GetService<ProjectShopAPIContext>())
 
-
-        }
+			//{
+			//	context.Database.Migrate();
+			//}
+		}
     }
 }
